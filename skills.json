@@ -64,6 +64,14 @@
         "subpath": "skills/code-simplification",
         "type": "github-extract",
         "description": "Simplifies complex logic for clarity and maintainability without altering runtime behavior"
+      },
+      {
+        "name": "ci-cd-and-automation",
+        "author": "addyosmani",
+        "repo": "https://github.com/addyosmani/agent-skills",
+        "subpath": "skills/ci-cd-and-automation",
+        "type": "github-extract",
+        "description": "Automates CI/CD pipeline setup, quality gates, test runners, and deployment strategies"
       }
     ],
     "custom": [

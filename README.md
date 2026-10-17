@@ -108,6 +108,7 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1 -TargetDir "$HOME\.windsu
 | **`performance-optimization`**| [addyosmani](https://github.com/addyosmani/agent-skills) | Core Web Vitals (LCP, INP, CLS), N+1 query elimination, memory leak prevention, and speed tuning. |
 | **`api-and-interface-design`** | [addyosmani](https://github.com/addyosmani/agent-skills) | REST, GraphQL, OpenAPI 3.1, and RFC 7807 compliant error handling and API contracts. |
 | **`code-simplification`** | [addyosmani](https://github.com/addyosmani/agent-skills) | Simplifies complex logic for clarity and maintainability without altering runtime behavior. |
+| **`ci-cd-and-automation`** | [addyosmani](https://github.com/addyosmani/agent-skills) | Automates CI/CD pipeline setup, quality gates, test runners, and deployment strategies. |
 
 ### 3. Custom / Personal Skills (`custom-skills/`)
 
