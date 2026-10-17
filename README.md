@@ -23,7 +23,7 @@ AI coding skills often end up scattered across different machines, outdated over
 
 To back up and version-control your own skills to GitHub:
 
-* **Option A (Recommended):** Click **"Use this template"** (or **"Fork"**) at the top of this GitHub repository to generate your own personal repository (e.g. `yourname/my-skills`), then clone it:
+* **Option A (Recommended):** Click **"Use this template"** at the top of this repository to create your own personal repository (e.g. `yourname/my-skills`), then clone it:
   ```bash
   git clone https://github.com/<your-username>/<your-repo-name>.git "$HOME/Documents/antigravity/curated-skills"
   cd "$HOME/Documents/antigravity/curated-skills"
