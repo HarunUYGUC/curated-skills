@@ -73,6 +73,7 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1 -TargetDir "$HOME\.windsu
 | Skill | Location | Description |
 | :--- | :--- | :--- |
 | **`push`** | [`custom-skills/push/`](./custom-skills/push/) | Inspects git changes, crafts conventional commits in English, and pushes to GitHub. |
+| **`skill-manager`** | [`custom-skills/skill-manager/`](./custom-skills/skill-manager/) | Automates adding, removing, creating, and synchronizing skills within the repository. |
 
 ---
 

@@ -72,6 +72,12 @@
         "author": "harun (local)",
         "path": "custom-skills/push",
         "description": "Inspects git changes, crafts conventional commits in English, and pushes to GitHub"
+      },
+      {
+        "name": "skill-manager",
+        "author": "harun (local)",
+        "path": "custom-skills/skill-manager",
+        "description": "Automates adding, removing, creating, and synchronizing skills within the curated-skills repository"
       }
     ]
   }
