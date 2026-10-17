@@ -68,6 +68,12 @@
     ],
     "custom": [
       {
+        "name": "git-summary",
+        "author": "HarunUYGUC",
+        "path": "custom-skills/git-summary",
+        "description": "Generates clean, human-readable daily standup summaries and dev activity reports from git commits and working tree status"
+      },
+      {
         "name": "push",
         "author": "HarunUYGUC",
         "path": "custom-skills/push",

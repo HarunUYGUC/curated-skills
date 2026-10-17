@@ -112,6 +112,7 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1 -TargetDir "$HOME\.windsu
 ### 3. Custom / Personal Skills (`custom-skills/`)
 
 The [`custom-skills/`](./custom-skills/) directory is your personal workspace:
+* **`git-summary`**: Transforms raw git commits and working tree status into a sleek, copy-paste ready daily standup summary.
 * **`push`**: A bundled sample utility that inspects git changes, crafts conventional commit messages in English, and pushes to GitHub. (Keep it or replace it with your own workflows!).
 * **Your Own Skills**: Place any new custom skill directories inside `custom-skills/`. The installer will automatically discover and install them.
 
@@ -122,6 +123,8 @@ The [`custom-skills/`](./custom-skills/) directory is your personal workspace:
 ```text
 curated-skills/
 ├── custom-skills/              # Workspace for your personal custom skills
+│   ├── git-summary/            # 📊 Standup summary & dev activity aggregator
+│   │   └── SKILL.md
 │   ├── push/                   # Bundled utility: Autonomous conventional commit & push
 │   │   └── SKILL.md
 │   └── skill-manager/          # 🧠 CORE ENGINE: Universal autonomous skill manager agent
