@@ -229,18 +229,20 @@ if ($CleanTemplate) {
 }
 
 # -------------------------------------------------------------------------
-# AUTO-LOCATION REGISTRATION (ZERO-CONFIG REPO BINDING)
+# AUTO-LOCATION & PREFERENCE REGISTRATION (ZERO-CONFIG REPO BINDING)
 # -------------------------------------------------------------------------
 $primarySkillManager = Join-Path $primaryTarget "skill-manager"
 if (Test-Path $primarySkillManager) {
+    $savedHostChoice = if ($TargetDir) { "custom" } else { $HostChoice }
     $repoConfig = @{
-        repoPath  = $ScriptDir
-        updatedAt = (Get-Date).ToString("yyyy-MM-ddTHH:mm:ssK")
+        repoPath   = $ScriptDir
+        targetHost = $savedHostChoice
+        updatedAt  = (Get-Date).ToString("yyyy-MM-ddTHH:mm:ssK")
     }
     $repoConfigJson = $repoConfig | ConvertTo-Json -Compress
     $primaryConfigFile = Join-Path $primarySkillManager "repo-config.json"
     Set-Content -Path $primaryConfigFile -Value $repoConfigJson -Encoding UTF8
-    Write-Host "`n  [i] Registered auto-location config: $ScriptDir" -ForegroundColor DarkGray
+    Write-Host "`n  [i] Registered auto-location config: $ScriptDir (targetHost: $savedHostChoice)" -ForegroundColor DarkGray
 }
 
 # -------------------------------------------------------------------------

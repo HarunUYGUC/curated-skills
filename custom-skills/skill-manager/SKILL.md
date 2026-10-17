@@ -20,8 +20,12 @@ When executed, determine the active AI coding host and its corresponding install
 | **Cursor / Codex** | `$HOME\.cursor\skills\` (or global config) | `<workspace>\.agents\skills\` |
 | **Windsurf / OpenCode** | `$HOME\.windsurf\skills\` | `<workspace>\.agents\skills\` |
 
-- **Central Curated Repository Location Resolution:**
-  To locate the repository root containing `skills.json`, resolve in this order:
+- **Central Curated Repository & Sync Preferences (`repo-config.json`):**
+  Check `repo-config.json` inside `skill-manager`'s own directory:
+  - `repoPath`: The absolute path to the repository root.
+  - `targetHost`: The user's persisted sync target (`"auto"`, `"gemini"`, `"claude"`, `"cursor"`, `"windsurf"`). Defaults to `"auto"` if omitted.
+  
+  Resolution order for repository root:
   1. **Auto-Detected Configuration (`repo-config.json`):** Check if `repo-config.json` exists in `skill-manager`'s own folder. Read `repoPath` (automatically written by `install.ps1`).
   2. **Environment Variable:** Check `$env:CURATED_SKILLS_DIR` if set.
   3. **Default Location:** Check `$HOME/Documents/antigravity/curated-skills`.
@@ -75,9 +79,10 @@ Trigger: User provides a GitHub repository link or requests an existing open-sou
      }
      ```
   2. Add a row to the **1. External Skills** table in `curated-skills/README.md`.
-  3. Synchronize across all detected AI hosts by executing:
+  3. Synchronize by executing `install.ps1` with the user's preferred `targetHost`:
      ```powershell
-     powershell -ExecutionPolicy Bypass -File .\install.ps1 -HostChoice auto
+     # Read targetHost from repo-config.json (defaults to 'auto' if omitted):
+     powershell -ExecutionPolicy Bypass -File .\install.ps1 -HostChoice <targetHost>
      ```
      *(Do NOT run interactive `install.bat` inside automated agent sessions to avoid blocking prompts).*
 - **If Local:**
@@ -100,11 +105,12 @@ Trigger: User requests to build a new skill or custom workflow.
   1. Save file to: `curated-skills/custom-skills/<skill-name>/SKILL.md`.
   2. Register in `curated-skills/skills.json` under `skills.custom`.
   3. Add row to **2. Custom Skills** table in `curated-skills/README.md`.
-  4. Synchronize across all detected AI hosts simultaneously:
+  4. Synchronize across preferred host(s) simultaneously:
      ```powershell
-     powershell -ExecutionPolicy Bypass -File .\install.ps1 -HostChoice auto
+     # Read targetHost from repo-config.json (defaults to 'auto' if omitted):
+     powershell -ExecutionPolicy Bypass -File .\install.ps1 -HostChoice <targetHost>
      ```
-     *(This automatically copies the new custom skill and replicates it to Antigravity, Claude Code, Cursor, and Windsurf at local SSD speed).*
+     *(This automatically copies the new custom skill and replicates it according to targetHost at local SSD speed).*
 - **If Local:**
   1. Save directly to `<workspace>\.agents\skills\<skill-name>\SKILL.md`.
 
@@ -125,7 +131,21 @@ Trigger: User requests to remove or delete a skill.
 
 ---
 
-## 6. Git Hygiene for `curated-skills`
+## 6. Switching Target Host Preference
+
+Trigger: User requests to change their default target AI host (e.g., *"Switch sync mode to auto"*, *"Only sync to Antigravity from now on"*, *"Change skill manager target to Claude Code"*).
+
+1. Read `repo-config.json` in `skill-manager`'s directory.
+2. Update `targetHost` to the requested value (`auto`, `gemini`, `claude`, `cursor`, `windsurf`).
+3. Re-run `install.ps1` with the new target:
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File .\install.ps1 -HostChoice <targetHost>
+   ```
+4. Confirm to the user that the preference was updated and synchronizations applied.
+
+---
+
+## 7. Git Hygiene for `curated-skills`
 Whenever modifications are made to the central `curated-skills` repository (for global additions, removals, or custom skill authoring):
 - Run `git status` to check changes.
 - Suggest or commit with a conventional commit message (e.g., `feat(skills): add <skill-name>`, `feat(custom): add <skill-name>`, or `chore(skills): remove <skill-name>`).

@@ -97,6 +97,9 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1 -HostChoice windsurf  # W
 powershell -ExecutionPolicy Bypass -File .\install.ps1 -TargetDir "C:\path\to\skills"
 ```
 
+### 💾 Preference Persistence
+The installer saves your chosen host selection (`targetHost`) in `repo-config.json`. Whenever `skill-manager` adds or authors skills in the future, it automatically respects your preference. You can change your preference at any time simply by re-running `install.bat` / `install.ps1` or telling your AI assistant.
+
 ---
 
 ## 📦 What's Inside
