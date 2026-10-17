@@ -1,13 +1,19 @@
 # 🚀 Curated Agent Skills & Autonomous Skill Manager
 
+> **A single source of truth to consolidate, version-control, and effortlessly synchronize all your AI agent skills across machines, projects, and coding assistants.**
+
 A modular, lightweight, and cross-platform **Dotfiles & Management Framework** for AI coding agent skills ([Google Antigravity](https://antigravity.google), [Claude Code](https://claude.ai), [Cursor](https://cursor.com), [Windsurf](https://codeium.com/windsurf), Codex, etc.).
 
-Instead of bloating your repositories with megabytes of duplicated files, this repository adopts a **Dotfiles / Manifest Architecture** powered by an **Autonomous Skill Manager Agent**:
+---
 
-* 🧠 **Autonomous Management:** [`skill-manager`](./custom-skills/skill-manager/) acts as the repository's brain—allowing your AI agent to fetch external skills from GitHub, generate custom skills, and decide installation scopes (Global vs. Local).
-* 📋 **Curated Manifest:** External skills are referenced and managed declaratively via [`skills.json`](./skills.json).
-* 🛠️ **Custom Skills Workspace:** Craft and version-control your personal skills in [`custom-skills/`](./custom-skills/).
-* ⚡ **Two Installation Modes:** Choose between a full curated starter kit or a clean template with just the management engine.
+### 🎯 The Core Purpose
+
+AI coding skills often end up scattered across different machines, outdated over time, or lost across project directories. This repository acts as your **central skill hub**:
+
+* 📦 **Consolidate:** Bring all your external and custom skills together in one clean, lightweight manifest without bloating repos.
+* 🔄 **Synchronize:** Keep your local AI agents continuously updated with upstream sources in a single click or command.
+* ☁️ **Backup & Portability:** Version-control your entire agent skillset to your own GitHub repository, so you can spin up your ideal AI workflow on any new machine instantly.
+* 🧠 **Autonomous Management:** [`skill-manager`](./custom-skills/skill-manager/) empowers your AI assistant to fetch external skills from GitHub, generate custom skills, and manage installation scopes (Global vs. Local) automatically.
 
 ---
 
@@ -17,16 +23,19 @@ Instead of bloating your repositories with megabytes of duplicated files, this r
 
 To back up and version-control your own skills to GitHub:
 
-* **Option A (Recommended):** Click **"Use this template"** (or **"Fork"**) at the top of this GitHub repository to generate your own personal repository (e.g. `yourname/my-curated-skills`).
+* **Option A (Recommended):** Click **"Use this template"** (or **"Fork"**) at the top of this GitHub repository to generate your own personal repository (e.g. `yourname/my-skills`), then clone it:
+  ```bash
+  git clone https://github.com/<your-username>/<your-repo-name>.git "$HOME/Documents/antigravity/curated-skills"
+  cd "$HOME/Documents/antigravity/curated-skills"
+  ```
 * **Option B:** Clone this repository directly:
+  ```bash
+  git clone https://github.com/HarunUYGUC/curated-skills.git "$HOME/Documents/antigravity/curated-skills"
+  cd "$HOME/Documents/antigravity/curated-skills"
+  ```
 
-```bash
-git clone https://github.com/HarunUYGUC/curated-skills.git "$HOME/Documents/antigravity/curated-skills"
-cd "$HOME/Documents/antigravity/curated-skills"
-```
-
-> **💡 Custom Location Note:**
-> If you clone to a custom folder (e.g., `C:\tools\curated-skills` or `~/dotfiles/skills`), open [`custom-skills/skill-manager/SKILL.md`](./custom-skills/skill-manager/SKILL.md) and update the **`Central Curated Repository:`** line with your custom path. This allows `skill-manager` to find your central catalog from inside any project workspace.
+> **💡 Custom Directory / Repo Name Note:**
+> Whether you use this template or clone directly, if you place your repository in a custom folder or choose a different repository name (e.g., `C:\tools\my-skills` or `~/dotfiles/agent-skills`), open [`custom-skills/skill-manager/SKILL.md`](./custom-skills/skill-manager/SKILL.md) and update the **`Central Curated Repository:`** line with your custom path. This ensures `skill-manager` can always locate your central catalog from within any project workspace.
 
 ---
 
