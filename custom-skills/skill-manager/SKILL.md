@@ -20,7 +20,7 @@ When executed, determine the active AI coding host and its corresponding install
 | **Cursor / Codex** | `$HOME\.cursor\skills\` (or global config) | `<workspace>\.agents\skills\` |
 | **Windsurf / OpenCode** | `$HOME\.windsurf\skills\` | `<workspace>\.agents\skills\` |
 
-- **Central Curated Repository:** `C:\Users\harun\Documents\antigravity\curated-skills`
+- **Central Curated Repository:** `$HOME/Documents/antigravity/curated-skills`
   - Manifest: `curated-skills/skills.json`
   - Documentation: `curated-skills/README.md`
   - Custom skills source: `curated-skills/custom-skills/`
