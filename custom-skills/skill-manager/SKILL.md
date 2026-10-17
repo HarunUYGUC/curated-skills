@@ -20,10 +20,15 @@ When executed, determine the active AI coding host and its corresponding install
 | **Cursor / Codex** | `$HOME\.cursor\skills\` (or global config) | `<workspace>\.agents\skills\` |
 | **Windsurf / OpenCode** | `$HOME\.windsurf\skills\` | `<workspace>\.agents\skills\` |
 
-- **Central Curated Repository:** The repository root directory (where `skills.json` is located), or `$HOME/Documents/antigravity/curated-skills`
-  - Manifest: `skills.json`
-  - Documentation: `README.md`
-  - Custom skills source: `custom-skills/`
+- **Central Curated Repository Location Resolution:**
+  To locate the repository root containing `skills.json`, resolve in this order:
+  1. **Auto-Detected Configuration (`repo-config.json`):** Check if `repo-config.json` exists in `skill-manager`'s own folder. Read `repoPath` (automatically written by `install.ps1`).
+  2. **Environment Variable:** Check `$env:CURATED_SKILLS_DIR` if set.
+  3. **Default Location:** Check `$HOME/Documents/antigravity/curated-skills`.
+  4. **Dynamic Discovery:** Search `$HOME` for a directory containing `skills.json` and `skills.template.json`.
+  - Manifest: `<repo-root>/skills.json`
+  - Documentation: `<repo-root>/README.md`
+  - Custom skills source: `<repo-root>/custom-skills/`
 
 ---
 
@@ -70,7 +75,11 @@ Trigger: User provides a GitHub repository link or requests an existing open-sou
      }
      ```
   2. Add a row to the **1. External Skills** table in `curated-skills/README.md`.
-  3. Execute `install.bat` (or `install.ps1`) to download and configure into the global directory.
+  3. Synchronize across all detected AI hosts by executing:
+     ```powershell
+     powershell -ExecutionPolicy Bypass -File .\install.ps1 -HostChoice auto
+     ```
+     *(Do NOT run interactive `install.bat` inside automated agent sessions to avoid blocking prompts).*
 - **If Local:**
   1. Download or clone directly into `<workspace>\.agents\skills\<skill-name>\`.
   2. Verify that `<workspace>\.agents\skills\<skill-name>\SKILL.md` is valid.
@@ -91,7 +100,11 @@ Trigger: User requests to build a new skill or custom workflow.
   1. Save file to: `curated-skills/custom-skills/<skill-name>/SKILL.md`.
   2. Register in `curated-skills/skills.json` under `skills.custom`.
   3. Add row to **2. Custom Skills** table in `curated-skills/README.md`.
-  4. Copy to the active host's global directory (e.g., `~/.gemini/config/skills/<skill-name>/`).
+  4. Synchronize across all detected AI hosts simultaneously:
+     ```powershell
+     powershell -ExecutionPolicy Bypass -File .\install.ps1 -HostChoice auto
+     ```
+     *(This automatically copies the new custom skill and replicates it to Antigravity, Claude Code, Cursor, and Windsurf at local SSD speed).*
 - **If Local:**
   1. Save directly to `<workspace>\.agents\skills\<skill-name>\SKILL.md`.
 
@@ -106,9 +119,9 @@ Trigger: User requests to remove or delete a skill.
    - Remove entry from `curated-skills/skills.json`.
    - Remove row from `curated-skills/README.md`.
    - If custom, delete `curated-skills/custom-skills/<skill-name>/`.
-   - Delete from the host's global directory (`~/.gemini/config/skills/<skill-name>/` or `~/.claude/skills/<skill-name>/`).
-3. If Local:
-   - Delete `<workspace>\.agents\skills\<skill-name>/`.
+   - Delete from all installed AI host directories (e.g., `~/.gemini/config/skills/<skill-name>/`, `~/.claude/skills/<skill-name>/`, `~/.cursor/skills/<skill-name>/`, `~/.windsurf/skills/<skill-name>/`).
+- **If Local:**
+  1. Delete `<workspace>\.agents\skills\<skill-name>/`.
 
 ---
 

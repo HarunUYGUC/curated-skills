@@ -229,6 +229,21 @@ if ($CleanTemplate) {
 }
 
 # -------------------------------------------------------------------------
+# AUTO-LOCATION REGISTRATION (ZERO-CONFIG REPO BINDING)
+# -------------------------------------------------------------------------
+$primarySkillManager = Join-Path $primaryTarget "skill-manager"
+if (Test-Path $primarySkillManager) {
+    $repoConfig = @{
+        repoPath  = $ScriptDir
+        updatedAt = (Get-Date).ToString("yyyy-MM-ddTHH:mm:ssK")
+    }
+    $repoConfigJson = $repoConfig | ConvertTo-Json -Compress
+    $primaryConfigFile = Join-Path $primarySkillManager "repo-config.json"
+    Set-Content -Path $primaryConfigFile -Value $repoConfigJson -Encoding UTF8
+    Write-Host "`n  [i] Registered auto-location config: $ScriptDir" -ForegroundColor DarkGray
+}
+
+# -------------------------------------------------------------------------
 # REPLICATE TO ADDITIONAL AI HOSTS (LOCAL SSD COPY - NO RE-DOWNLOADING)
 # -------------------------------------------------------------------------
 if ($resolvedTargets.Count -gt 1) {

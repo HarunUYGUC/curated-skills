@@ -34,8 +34,8 @@ To back up and version-control your own skills to GitHub:
   cd "$HOME/Documents/antigravity/curated-skills"
   ```
 
-> **💡 Custom Directory / Repo Name Note:**
-> Whether you use this template or clone directly, if you place your repository in a custom folder or choose a different repository name (e.g., `C:\tools\my-skills` or `~/dotfiles/agent-skills`), open [`custom-skills/skill-manager/SKILL.md`](./custom-skills/skill-manager/SKILL.md) and update the **`Central Curated Repository:`** line with your custom path. This ensures `skill-manager` can always locate your central catalog from within any project workspace.
+> **✨ Zero-Config Auto-Location:**
+> No matter where you clone this repository or what you name it (e.g., `C:\tools\my-skills` or `~/dotfiles/agent-skills`), the installer (`install.bat` / `install.ps1`) automatically binds the repository's path into `skill-manager` (`repo-config.json`). You never need to manually edit configuration paths.
 
 ---
 
