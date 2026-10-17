@@ -1,19 +1,24 @@
-# 🚀 Curated Agent Skills
+# 🚀 Curated Agent Skills & Autonomous Skill Manager
 
-A lightweight, modular, and portable **Curated Skills (Dotfiles)** configuration repository for AI coding agents (Google Antigravity, Claude Code, Cursor, Windsurf, Codex, etc.).
+A modular, lightweight, and cross-platform **Dotfiles & Management Framework** for AI coding agent skills ([Google Antigravity](https://antigravity.google), [Claude Code](https://claude.ai), [Cursor](https://cursor.com), [Windsurf](https://codeium.com/windsurf), Codex, etc.).
 
-Instead of bloating your GitHub repository with megabytes of duplicated files, this repository adopts a **Dotfiles / Manifest Architecture**:
-* **External Skills:** Only source repository URLs and reference manifests are tracked in [`skills.json`](./skills.json).
-* **Custom Skills:** Your own locally crafted skills live cleanly in [`custom-skills/`](./custom-skills/).
-* **Automated Installation:** A single command or double-click downloads, configures, and synchronizes everything directly from upstream sources.
+Instead of bloating your repositories with megabytes of duplicated files, this repository adopts a **Dotfiles / Manifest Architecture** powered by an **Autonomous Skill Manager Agent**:
+
+* 🧠 **Autonomous Management:** [`skill-manager`](./custom-skills/skill-manager/) acts as the repository's brain—allowing your AI agent to fetch external skills from GitHub, generate custom skills, and decide installation scopes (Global vs. Local).
+* 📋 **Curated Manifest:** External skills are referenced and managed declaratively via [`skills.json`](./skills.json).
+* 🛠️ **Custom Skills Workspace:** Craft and version-control your personal skills in [`custom-skills/`](./custom-skills/).
+* ⚡ **Two Installation Modes:** Choose between a full curated starter kit or a clean template with just the management engine.
 
 ---
 
 ## ⚡ Quick Start
 
-### 1. Clone the Repository
+### 1. Get the Repository
 
-Clone this repository to your preferred location (recommended standard path: `$HOME/Documents/antigravity/curated-skills`):
+To back up and version-control your own skills to GitHub:
+
+* **Option A (Recommended):** Click **"Use this template"** (or **"Fork"**) at the top of this GitHub repository to generate your own personal repository (e.g. `yourname/my-curated-skills`).
+* **Option B:** Clone this repository directly:
 
 ```bash
 git clone https://github.com/HarunUYGUC/curated-skills.git "$HOME/Documents/antigravity/curated-skills"
@@ -21,99 +26,94 @@ cd "$HOME/Documents/antigravity/curated-skills"
 ```
 
 > **💡 Custom Location Note:**
-> If you clone to a custom folder (e.g., `C:\tools\curated-skills` or `~/repos/curated-skills`), simply open [`custom-skills/skill-manager/SKILL.md`](./custom-skills/skill-manager/SKILL.md) and update the **`Central Curated Repository:`** line with your custom path. This ensures the `skill-manager` agent can locate your central catalog even when invoked from outside this folder (e.g., inside other project workspaces).
+> If you clone to a custom folder (e.g., `C:\tools\curated-skills` or `~/dotfiles/skills`), open [`custom-skills/skill-manager/SKILL.md`](./custom-skills/skill-manager/SKILL.md) and update the **`Central Curated Repository:`** line with your custom path. This allows `skill-manager` to find your central catalog from inside any project workspace.
 
 ---
 
-### 2. Run the Installer
+### 2. Choose Your Installation Mode
 
-When setting up a new machine or refreshing your environment, choose either method:
+When running the installer, choose between two modes:
+
+| Mode | What it Installs | Best For |
+| :--- | :--- | :--- |
+| **`[1] Full Curated Pack`** *(Recommended)* | Core `skill-manager` + 7 Curated External Skills + `push` | Getting a fully loaded, production-ready agent toolkit out of the box. |
+| **`[2] Clean Slate`** *(Empty Template)* | Core `skill-manager` engine **only** | Starting with a clean canvas to curate and build your own private skills catalog. |
 
 #### Method 1: Double-Click (Easiest - Windows)
-Double-click the **`install.bat`** file in this directory. The installer will run automatically and display a summary of installed skills when finished.
+Double-click **`install.bat`**. You will be prompted to select **[1] Full Curated Pack** or **[2] Clean Slate**.
 
 #### Method 2: Command Line / PowerShell
-Run the following command in PowerShell:
+Run the installer via PowerShell:
 
 ```powershell
+# Mode 1: Full Curated Pack (Default)
 powershell -ExecutionPolicy Bypass -File .\install.ps1
-```
 
-This script:
-1. Parses [`skills.json`](./skills.json),
-2. Clones full-repository skills (`ui-ux-pro-max`, `diagram-design`) at their latest revisions,
-3. Extracts individual skills (`shipping-and-launch`, `security-and-hardening`, etc.) and their references without downloading full monorepos,
-4. Automatically optimizes Windows file paths,
-5. Copies your custom skills (`custom-skills/`) to your target agent configuration directory.
+# Mode 2: Clean Slate (Empty Template)
+powershell -ExecutionPolicy Bypass -File .\install.ps1 -CleanTemplate
+```
 
 ---
 
-## 🌐 Installing to Different AI Tools
+## 🌐 Multi-Agent Compatibility
 
-Because these skills follow the open **Agent Skills Standard**, they are 100% compatible across different AI coding environments. Specify your target directory as needed:
+Because all skills adhere to the open **Agent Skills Standard**, you can install them to any supported AI host by passing `-TargetDir`:
 
 ```powershell
-# For Google Antigravity (Default):
+# Google Antigravity (Default):
 powershell -ExecutionPolicy Bypass -File .\install.ps1 -TargetDir "$HOME\.gemini\config\skills"
 
-# For Claude Code (Global):
+# Claude Code (Global):
 powershell -ExecutionPolicy Bypass -File .\install.ps1 -TargetDir "$HOME\.claude\skills"
 
-# For Cursor / Codex (Current Project Level):
+# Cursor / Codex (Project-Level):
 powershell -ExecutionPolicy Bypass -File .\install.ps1 -TargetDir ".\.agents\skills"
 
-# For Windsurf / OpenCode (Global):
+# Windsurf / OpenCode (Global):
 powershell -ExecutionPolicy Bypass -File .\install.ps1 -TargetDir "$HOME\.windsurf\skills"
 ```
 
-*(Alternatively, edit `install.bat` and uncomment your preferred tool).*
+*(You can also edit `install.bat` and uncomment your preferred AI tool).*
 
 ---
 
-## 📦 Included Skills
+## 📦 What's Inside
 
-### 1. External Skills
+### 1. The Core Engine (Built-in)
 
-| Skill | Author / Source | Description |
+| Skill | Role | Description |
+| :--- | :--- | :--- |
+| **`skill-manager`** | **Core Engine** | The autonomous brain of this repository. Allows your AI assistant to add, inspect, create, scope (Global vs. Local), and remove skills dynamically. |
+
+### 2. Curated External Skills (Optional / Full Pack)
+
+| Skill | Source | Description |
 | :--- | :--- | :--- |
 | **`ui-ux-pro-max`** | [nextlevelbuilder](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | Design intelligence with 84 UI styles, 192 color palettes, 74 typography pairings, and 119 UX guidelines. |
-| **`diagram-design`** | [cathrynlavery](https://github.com/cathrynlavery/diagram-design) | 35+ editorial and enterprise SVG/HTML architecture diagrams, data flows, and system blueprint templates. |
+| **`diagram-design`** | [cathrynlavery](https://github.com/cathrynlavery/diagram-design) | 35+ editorial and enterprise SVG/HTML architecture diagrams, data flows, and system blueprints. |
 | **`shipping-and-launch`** | [addyosmani](https://github.com/addyosmani/agent-skills) | Pre-flight verification, staged rollouts (canary), and rollback planning before deploying to production. |
 | **`security-and-hardening`** | [addyosmani](https://github.com/addyosmani/agent-skills) | OWASP Top 10, SQLi, XSS, secure authentication, and data leak prevention standards. |
 | **`performance-optimization`**| [addyosmani](https://github.com/addyosmani/agent-skills) | Core Web Vitals (LCP, INP, CLS), N+1 query elimination, memory leak prevention, and speed tuning. |
-| **`api-and-interface-design`** | [addyosmani](https://github.com/addyosmani/agent-skills) | REST, GraphQL, OpenAPI 3.1, and RFC 7807 compliant error handling and API contract architecture. |
+| **`api-and-interface-design`** | [addyosmani](https://github.com/addyosmani/agent-skills) | REST, GraphQL, OpenAPI 3.1, and RFC 7807 compliant error handling and API contracts. |
 | **`code-simplification`** | [addyosmani](https://github.com/addyosmani/agent-skills) | Simplifies complex logic for clarity and maintainability without altering runtime behavior. |
 
-### 2. Custom Skills
+### 3. Custom / Personal Skills (`custom-skills/`)
 
-| Skill | Location | Description |
-| :--- | :--- | :--- |
-| **`push`** | [`custom-skills/push/`](./custom-skills/push/) | Inspects git changes, crafts conventional commits in English, and pushes to GitHub. |
-| **`skill-manager`** | [`custom-skills/skill-manager/`](./custom-skills/skill-manager/) | Automates adding, removing, creating, and synchronizing skills within the repository. |
+The [`custom-skills/`](./custom-skills/) directory is your personal workspace:
+* **`push`**: A bundled sample utility that inspects git changes, crafts conventional commit messages in English, and pushes to GitHub. (Keep it or replace it with your own workflows!).
+* **Your Own Skills**: Place any new custom skill directories inside `custom-skills/`. The installer will automatically discover and install them.
 
 ---
 
-## ➕ How to Add New Skills
+## 🤖 Using `skill-manager` with Your Agent
 
-### A. Adding an External Skill from GitHub:
-Add an entry to the `external` array in [`skills.json`](./skills.json):
+Once installed, you don't need to manually edit config files. Simply speak to your AI agent:
 
-```json
-{
-  "name": "skill-name",
-  "author": "github-username",
-  "repo": "https://github.com/username/repo",
-  "type": "git-clone",
-  "description": "Short description of what the skill does..."
-}
-```
-Then run `install.bat` (or `.\install.ps1`).
+* *"Add the GitHub skill from `https://github.com/user/my-skill`"*
+* *"Create a new skill for summarizing Kubernetes deployment logs"*
+* *"Remove the diagram-design skill"*
 
-### B. Creating a Custom Skill:
-1. Create a new directory under `custom-skills/`: e.g. `custom-skills/my-skill/`
-2. Add your `SKILL.md` file inside that folder.
-3. *(Optional)* Add its name and description to the `custom` list in `skills.json` to keep your catalog updated.
-4. Run `install.bat` (or `.\install.ps1`). The installer will automatically detect all directories in `custom-skills/` and install them.
+The `skill-manager` will prompt you for the desired scope (**Global** for all projects or **Local** for the current workspace) and handle installation automatically.
 
 ---
 
