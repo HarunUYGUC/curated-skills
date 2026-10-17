@@ -1,110 +1,118 @@
 ---
 name: skill-manager
-description: Manages the curated-skills repository. Use when adding an external skill from GitHub, creating a new custom skill, removing an existing skill, or synchronizing skills to local AI agent environments.
+description: Manages skills across AI coding agents (Antigravity, Claude Code, Cursor, Windsurf). Use when adding an external skill from GitHub, creating a custom skill, removing a skill, or deciding between global and local (project-level) installation.
 ---
 
-# Skill Manager Workflow
+# Universal Skill Manager Workflow
 
-This skill automates the lifecycle management of skills within the `curated-skills` repository (`C:\Users\harun\Documents\antigravity\curated-skills`).
-
-## Workspaces & Locations
-- **Curated Repository:** `C:\Users\harun\Documents\antigravity\curated-skills`
-- **Global Skills Directory:** `C:\Users\harun\.gemini\config\skills` (or `$HOME\.gemini\config\skills`)
-- **Manifest File:** `curated-skills/skills.json`
-- **Documentation:** `curated-skills/README.md`
-- **Custom Skills Directory:** `curated-skills/custom-skills`
+This skill automates adding, creating, removing, and scoping skills across any AI coding agent environment.
 
 ---
 
-## 1. Adding an External Skill from GitHub
+## 1. Runtime Environment & Target Directories
 
-Trigger: The user provides a GitHub repository URL or asks to add an existing skill from the internet.
+When executed, determine the active AI coding host and its corresponding installation paths:
 
-### Step 1: Inspect & Classify
-1. Fetch and inspect the repository:
-   - **Type A (`git-clone`):** The repository itself is a standalone, dedicated skill (contains `SKILL.md` at its root or represents a single package like `ui-ux-pro-max` or `diagram-design`).
-   - **Type B (`github-extract`):** The repository is a monorepo or collection containing multiple skills (like `addyosmani/agent-skills`). Identify the specific `subpath` (e.g. `skills/<skill-name>`).
-2. Read the target `SKILL.md` to extract:
-   - `name`: exact skill name identifier.
-   - `author`: GitHub owner / author username.
-   - `description`: 1-sentence concise summary in English.
-   - `references`: Check if the skill references external checklist files (e.g. in `references/`).
+| AI Host Environment | Global Directory (All Projects) | Local Directory (Current Workspace) |
+| :--- | :--- | :--- |
+| **Google Antigravity** | `$HOME\.gemini\config\skills\` | `<workspace>\.agents\skills\` |
+| **Claude Code** | `$HOME\.claude\skills\` | `<workspace>\.claude\skills\` |
+| **Cursor / Codex** | `$HOME\.cursor\skills\` (or global config) | `<workspace>\.agents\skills\` |
+| **Windsurf / OpenCode** | `$HOME\.windsurf\skills\` | `<workspace>\.agents\skills\` |
 
-### Step 2: Update `skills.json`
-Add the new skill object to the `skills.external` array in `skills.json`:
-
-```json
-{
-  "name": "<skill-name>",
-  "author": "<github-author>",
-  "repo": "https://github.com/<owner>/<repo>",
-  "subpath": "<optional-subpath>",
-  "type": "git-clone" | "github-extract",
-  "references": ["<optional-reference-files>"],
-  "description": "<concise-english-description>"
-}
-```
-
-### Step 3: Update `README.md`
-Add a new row to the **1. External Skills** table in `README.md`:
-
-```markdown
-| **`<skill-name>`** | [<author>](https://github.com/<owner>/<repo>) | <description> |
-```
-
-### Step 4: Install & Verify
-1. Run `install.bat` (or execute `install.ps1`) to download the skill and verify clean installation into the global directory.
-2. Verify that the skill appears in `C:\Users\harun\.gemini\config\skills\<skill-name>\SKILL.md`.
+- **Central Curated Repository:** `C:\Users\harun\Documents\antigravity\curated-skills`
+  - Manifest: `curated-skills/skills.json`
+  - Documentation: `curated-skills/README.md`
+  - Custom skills source: `curated-skills/custom-skills/`
 
 ---
 
-## 2. Creating a New Custom Skill
+## 2. Mandatory Scope Decision: Global vs. Local
 
-Trigger: The user asks to write, generate, or build a new custom skill for their personal workflow.
+Before installing or creating any skill:
+
+1. **Check User Intent:** If the user explicitly specified the scope (e.g., *"install globally"* or *"install only to this project"*), proceed with that choice.
+2. **Proactively Ask if Undefined:** If the scope was NOT specified in the user's prompt, ask the user before writing any files:
+   > *"Would you like to install this skill **Globally** (available across all projects on this machine) or **Locally** (only in this specific project workspace)?"*
+
+### Scope Behaviors:
+- **Global Scope:**
+  - Registered into the central `curated-skills` repository (`skills.json` and `README.md`).
+  - Installed into the host's global skills directory (e.g., `~/.gemini/config/skills/` or `~/.claude/skills/`).
+- **Local (Project) Scope:**
+  - Installed directly into `<current-workspace>\.agents\skills\<skill-name>\` (or `<workspace>\.claude\skills\` for Claude Code).
+  - Keeps the central dotfiles repository clean and prevents global context pollution.
+
+---
+
+## 3. Adding an External Skill from GitHub
+
+Trigger: User provides a GitHub repository link or requests an existing open-source skill.
+
+### Step 1: Inspect Repository
+1. Determine repository structure:
+   - **`git-clone`:** The repository is a standalone skill with `SKILL.md` at root.
+   - **`github-extract`:** The repository is a monorepo / collection. Identify the specific `subpath` (e.g. `skills/<name>`).
+2. Read the upstream `SKILL.md` to extract: `name`, `author`, `description`, and any `references`.
+
+### Step 2: Install Based on Chosen Scope
+- **If Global:**
+  1. Add an entry to `skills.json` under `skills.external`:
+     ```json
+     {
+       "name": "<name>",
+       "author": "<author>",
+       "repo": "https://github.com/<owner>/<repo>",
+       "subpath": "<optional-subpath>",
+       "type": "git-clone" | "github-extract",
+       "references": ["<optional-reference-files>"],
+       "description": "<concise-english-summary>"
+     }
+     ```
+  2. Add a row to the **1. External Skills** table in `curated-skills/README.md`.
+  3. Execute `install.bat` (or `install.ps1`) to download and configure into the global directory.
+- **If Local:**
+  1. Download or clone directly into `<workspace>\.agents\skills\<skill-name>\`.
+  2. Verify that `<workspace>\.agents\skills\<skill-name>\SKILL.md` is valid.
+
+---
+
+## 4. Creating a New Custom Skill
+
+Trigger: User requests to build a new skill or custom workflow.
 
 ### Step 1: Author the Skill
-1. Create a dedicated folder: `curated-skills/custom-skills/<skill-name>/`.
-2. Write `SKILL.md` following Agent Skills best practices:
-   - Valid YAML frontmatter with `name` and `description` (clearly defining *when* and *why* it triggers).
-   - Clear operational rules, checklists, and progressive disclosure links.
-   - Verification steps.
+1. Create `SKILL.md` adhering strictly to Agent Skills best practices:
+   - Frontmatter with unique `name` and action-oriented `description` (stating *when* to trigger).
+   - Clear rules, operational steps, checklists, and verification criteria.
 
-### Step 2: Register in `skills.json`
-Add an entry to the `skills.custom` array in `skills.json`:
-
-```json
-{
-  "name": "<skill-name>",
-  "author": "harun (local)",
-  "path": "custom-skills/<skill-name>",
-  "description": "<concise-english-description>"
-}
-```
-
-### Step 3: Update `README.md`
-Add a row to the **2. Custom Skills** table in `README.md`:
-
-```markdown
-| **`<skill-name>`** | [`custom-skills/<skill-name>/`](./custom-skills/<skill-name>/) | <description> |
-```
-
-### Step 4: Synchronize
-Copy the new skill directory to `C:\Users\harun\.gemini\config\skills\<skill-name>` so it is immediately active in the current AI environment.
+### Step 2: Save by Scope
+- **If Global:**
+  1. Save file to: `curated-skills/custom-skills/<skill-name>/SKILL.md`.
+  2. Register in `curated-skills/skills.json` under `skills.custom`.
+  3. Add row to **2. Custom Skills** table in `curated-skills/README.md`.
+  4. Copy to the active host's global directory (e.g., `~/.gemini/config/skills/<skill-name>/`).
+- **If Local:**
+  1. Save directly to `<workspace>\.agents\skills\<skill-name>\SKILL.md`.
 
 ---
 
-## 3. Removing a Skill
+## 5. Removing a Skill
 
-Trigger: The user asks to remove, delete, or uninstall a skill.
+Trigger: User requests to remove or delete a skill.
 
-1. Remove the skill entry from `skills.json`.
-2. Remove the row from `README.md`.
-3. If it is a custom skill, delete `curated-skills/custom-skills/<skill-name>/`.
-4. Remove the skill folder from the global directory: `C:\Users\harun\.gemini\config\skills\<skill-name>`.
+1. Determine where the skill is located (Global in `curated-skills`, or Local in the workspace).
+2. If Global:
+   - Remove entry from `curated-skills/skills.json`.
+   - Remove row from `curated-skills/README.md`.
+   - If custom, delete `curated-skills/custom-skills/<skill-name>/`.
+   - Delete from the host's global directory (`~/.gemini/config/skills/<skill-name>/` or `~/.claude/skills/<skill-name>/`).
+3. If Local:
+   - Delete `<workspace>\.agents\skills\<skill-name>/`.
 
 ---
 
-## 4. Git Hygiene
-After performing additions, modifications, or removals in the `curated-skills` repository:
-- Run `git status` to verify staged/unstaged changes.
-- Propose or execute a clean conventional commit (e.g. `feat(skills): add <skill-name>`, `feat(custom): add <skill-name>`, or `chore(skills): remove <skill-name>`).
+## 6. Git Hygiene for `curated-skills`
+Whenever modifications are made to the central `curated-skills` repository (for global additions, removals, or custom skill authoring):
+- Run `git status` to check changes.
+- Suggest or commit with a conventional commit message (e.g., `feat(skills): add <skill-name>`, `feat(custom): add <skill-name>`, or `chore(skills): remove <skill-name>`).
