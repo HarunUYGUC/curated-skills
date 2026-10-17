@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "description": "Curated Agent Skills Manifest - Lightweight, modular configuration for AI coding agents",
+  "skills": {
+    "external": [
+      {
+        "name": "ui-ux-pro-max",
+        "author": "nextlevelbuilder",
+        "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+        "type": "git-clone",
+        "description": "Design intelligence with 84 UI styles, 192 color palettes, 74 typography pairings, and 119 UX guidelines"
+      },
+      {
+        "name": "diagram-design",
+        "author": "cathrynlavery",
+        "repo": "https://github.com/cathrynlavery/diagram-design",
+        "type": "git-clone",
+        "description": "35+ editorial and enterprise SVG/HTML architecture diagrams, data flows, and system blueprint templates"
+      },
+      {
+        "name": "shipping-and-launch",
+        "author": "addyosmani",
+        "repo": "https://github.com/addyosmani/agent-skills",
+        "subpath": "skills/shipping-and-launch",
+        "type": "github-extract",
+        "references": [
+          "definition-of-done.md",
+          "security-checklist.md",
+          "performance-checklist.md",
+          "accessibility-checklist.md",
+          "observability-checklist.md"
+        ],
+        "description": "Pre-flight verification, staged rollouts (canary), and rollback planning before deploying to production"
+      },
+      {
+        "name": "security-and-hardening",
+        "author": "addyosmani",
+        "repo": "https://github.com/addyosmani/agent-skills",
+        "subpath": "skills/security-and-hardening",
+        "type": "github-extract",
+        "description": "OWASP Top 10, SQLi, XSS, secure authentication, and data leak prevention standards"
+      },
+      {
+        "name": "performance-optimization",
+        "author": "addyosmani",
+        "repo": "https://github.com/addyosmani/agent-skills",
+        "subpath": "skills/performance-optimization",
+        "type": "github-extract",
+        "description": "Core Web Vitals (LCP, INP, CLS), N+1 query elimination, memory leak prevention, and speed tuning"
+      },
+      {
+        "name": "api-and-interface-design",
+        "author": "addyosmani",
+        "repo": "https://github.com/addyosmani/agent-skills",
+        "subpath": "skills/api-and-interface-design",
+        "type": "github-extract",
+        "description": "REST, GraphQL, OpenAPI 3.1, and RFC 7807 compliant error handling and API contract architecture"
+      },
+      {
+        "name": "code-simplification",
+        "author": "addyosmani",
+        "repo": "https://github.com/addyosmani/agent-skills",
+        "subpath": "skills/code-simplification",
+        "type": "github-extract",
+        "description": "Simplifies complex logic for clarity and maintainability without altering runtime behavior"
+      }
+    ],
+    "custom": [
+      {
+        "name": "push",
+        "author": "harun (local)",
+        "path": "custom-skills/push",
+        "description": "Inspects git changes, crafts conventional commits in English, and pushes to GitHub"
+      }
+    ]
+  }
+}
