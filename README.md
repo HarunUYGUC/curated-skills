@@ -45,20 +45,24 @@ When running the installer, choose between two modes:
 
 | Mode | What it Installs | Best For |
 | :--- | :--- | :--- |
-| **`[1] Full Curated Pack`** *(Recommended)* | Core `skill-manager` + 7 Curated External Skills + `push` | Getting a fully loaded, production-ready agent toolkit out of the box. |
+| **`[1] Full Curated Pack`** *(Recommended)* | Core `skill-manager` + 8 Curated External Skills + Custom Utilities | Getting a fully loaded, production-ready agent toolkit out of the box. |
 | **`[2] Clean Slate`** *(Empty Template)* | Core `skill-manager` engine **only** (initializes clean `skills.json` from `skills.template.json`) | Starting with a clean canvas to curate and build your own private skills catalog. |
 
 #### Method 1: Double-Click (Easiest - Windows)
-Double-click **`install.bat`**. You will be prompted to select **[1] Full Curated Pack** or **[2] Clean Slate**.
+Double-click **`install.bat`**. You will be guided through a simple 2-step setup:
+1. **Target AI Environment:** Choose `[1] Auto-Detect & Sync ALL` (Recommended) or pick a specific tool (Antigravity, Claude, Cursor, Windsurf).
+2. **Installation Mode:** Choose `[1] Full Curated Pack` or `[2] Clean Slate`.
+
+*(💡 **Quick Tip:** Pressing Enter twice automatically detects all installed AI agents and installs the full pack to all of them with zero configuration!).*
 
 #### Method 2: Command Line / PowerShell
 Run the installer via PowerShell:
 
 ```powershell
-# Mode 1: Full Curated Pack (Default)
+# Auto-detect all installed AI tools & install Full Pack (Default):
 powershell -ExecutionPolicy Bypass -File .\install.ps1
 
-# Mode 2: Clean Slate (Empty Template)
+# Clean Slate on all detected AI tools:
 powershell -ExecutionPolicy Bypass -File .\install.ps1 -CleanTemplate
 ```
 
@@ -67,25 +71,31 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1 -CleanTemplate
 
 ---
 
-## 🌐 Multi-Agent Compatibility
+## 🌐 Multi-Agent Auto-Detection & Cross-Sync
 
-Because all skills adhere to the open **Agent Skills Standard**, you can install them to any supported AI host by passing `-TargetDir`:
+Because all skills adhere to the open **Agent Skills Standard**, the installer automatically scans your machine for installed AI coding assistants and synchronizes all of them simultaneously:
+
+* 🤖 **Google Antigravity:** `$HOME\.gemini\config\skills\`
+* 🧠 **Claude Code:** `$HOME\.claude\skills\`
+* ⚡ **Cursor / Codex:** `$HOME\.cursor\skills\` (or `.\.agents\skills`)
+* 🌊 **Windsurf / OpenCode:** `$HOME\.windsurf\skills\`
+
+### ⚡ Smart Single-Download Replicator
+When multiple AI tools are detected, external skills are downloaded **only once** from GitHub to the primary target, then replicated to all other agent environments locally in milliseconds. Zero wasted bandwidth, zero duplicate cloning!
 
 ```powershell
-# Google Antigravity (Default):
-powershell -ExecutionPolicy Bypass -File .\install.ps1 -TargetDir "$HOME\.gemini\config\skills"
+# Auto-detect all installed AI tools (Default):
+powershell -ExecutionPolicy Bypass -File .\install.ps1 -HostChoice auto
 
-# Claude Code (Global):
-powershell -ExecutionPolicy Bypass -File .\install.ps1 -TargetDir "$HOME\.claude\skills"
+# Target a specific AI host directly:
+powershell -ExecutionPolicy Bypass -File .\install.ps1 -HostChoice gemini    # Google Antigravity
+powershell -ExecutionPolicy Bypass -File .\install.ps1 -HostChoice claude    # Claude Code
+powershell -ExecutionPolicy Bypass -File .\install.ps1 -HostChoice cursor    # Cursor
+powershell -ExecutionPolicy Bypass -File .\install.ps1 -HostChoice windsurf  # Windsurf
 
-# Cursor / Codex (Project-Level):
-powershell -ExecutionPolicy Bypass -File .\install.ps1 -TargetDir ".\.agents\skills"
-
-# Windsurf / OpenCode (Global):
-powershell -ExecutionPolicy Bypass -File .\install.ps1 -TargetDir "$HOME\.windsurf\skills"
+# Or specify an explicit target directory:
+powershell -ExecutionPolicy Bypass -File .\install.ps1 -TargetDir "C:\path\to\skills"
 ```
-
-*(You can also edit `install.bat` and uncomment your preferred AI tool).*
 
 ---
 
