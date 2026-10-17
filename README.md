@@ -11,12 +11,28 @@ Instead of bloating your GitHub repository with megabytes of duplicated files, t
 
 ## ⚡ Quick Start
 
+### 1. Clone the Repository
+
+Clone this repository to your preferred location (recommended standard path: `$HOME/Documents/antigravity/curated-skills`):
+
+```bash
+git clone https://github.com/HarunUYGUC/curated-skills.git "$HOME/Documents/antigravity/curated-skills"
+cd "$HOME/Documents/antigravity/curated-skills"
+```
+
+> **💡 Custom Location Note:**
+> If you clone to a custom folder (e.g., `C:\tools\curated-skills` or `~/repos/curated-skills`), simply open [`custom-skills/skill-manager/SKILL.md`](./custom-skills/skill-manager/SKILL.md) and update the **`Central Curated Repository:`** line with your custom path. This ensures the `skill-manager` agent can locate your central catalog even when invoked from outside this folder (e.g., inside other project workspaces).
+
+---
+
+### 2. Run the Installer
+
 When setting up a new machine or refreshing your environment, choose either method:
 
-### Method 1: Double-Click (Easiest)
+#### Method 1: Double-Click (Easiest - Windows)
 Double-click the **`install.bat`** file in this directory. The installer will run automatically and display a summary of installed skills when finished.
 
-### Method 2: Command Line / PowerShell
+#### Method 2: Command Line / PowerShell
 Run the following command in PowerShell:
 
 ```powershell
@@ -107,3 +123,9 @@ All credit for external skills belongs to their respective original authors:
 * **Addy Osmani** ([@addyosmani](https://github.com/addyosmani))
 * **NextLevelBuilder** ([@nextlevelbuilder](https://github.com/nextlevelbuilder))
 * **Cathryn Lavery** ([@cathrynlavery](https://github.com/cathrynlavery))
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](./LICENSE). Feel free to use, fork, and adapt it for your own AI development workflows.

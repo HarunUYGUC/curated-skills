@@ -60,28 +60,6 @@ foreach ($skill in $manifest.skills.external) {
             Write-Host "  [..] Cloning: $($skill.repo)..." -ForegroundColor Cyan
             git clone --depth 1 $skill.repo $dest
         }
-
-        # ui-ux-pro-max path fix for Windows compatibility
-        if ($skill.name -eq "ui-ux-pro-max") {
-            $skillMd = Join-Path $dest "SKILL.md"
-            if (Test-Path $skillMd) {
-                $pyPath = (Join-Path $dest "scripts/search.py").Replace('\', '/')
-                $content = Get-Content $skillMd -Raw -Encoding UTF8
-                if ($content -match "python3?\s+.*search\.py") {
-                    $content = $content -replace "python3?\s+.*search\.py", "python `"$pyPath`""
-                    Set-Content -Path $skillMd -Value $content -Encoding UTF8
-                }
-            }
-        }
-
-        # diagram-design root SKILL.md verification
-        if ($skill.name -eq "diagram-design") {
-            $rootSkillMd = Join-Path $dest "SKILL.md"
-            $nestedSkillMd = Join-Path $dest "skills\diagram-design\SKILL.md"
-            if (!(Test-Path $rootSkillMd) -and (Test-Path $nestedSkillMd)) {
-                Copy-Item -Path $nestedSkillMd -Destination $rootSkillMd -Force
-            }
-        }
     }
     elseif ($skill.type -eq "github-extract") {
         if (!(Test-Path $dest)) {
@@ -93,8 +71,11 @@ foreach ($skill in $manifest.skills.external) {
         $skillUrl = "$rawBase/$($skill.subpath)/SKILL.md"
         $targetSkillMd = Join-Path $dest "SKILL.md"
 
+        # Cross-platform curl resolution (curl.exe on Windows, curl on Linux/macOS)
+        $curl = if (Get-Command "curl.exe" -ErrorAction SilentlyContinue) { "curl.exe" } else { "curl" }
+
         Write-Host "  [..] Downloading SKILL.md..." -ForegroundColor Cyan
-        curl.exe -s -L $skillUrl -o $targetSkillMd
+        & $curl -s -L $skillUrl -o $targetSkillMd
 
         if ($skill.references) {
             $refDir = Join-Path $dest "references"
@@ -108,7 +89,7 @@ foreach ($skill in $manifest.skills.external) {
                 $refFileName = Split-Path -Leaf $refFile
                 $targetRef = Join-Path $refDir $refFileName
                 Write-Host "    |- Reference: $refFileName" -ForegroundColor DarkGray
-                curl.exe -s -L $refUrl -o $targetRef
+                & $curl -s -L $refUrl -o $targetRef
             }
 
             # Update relative reference paths inside SKILL.md
