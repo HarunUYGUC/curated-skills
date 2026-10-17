@@ -117,6 +117,26 @@ The [`custom-skills/`](./custom-skills/) directory is your personal workspace:
 
 ---
 
+## 📂 Repository Structure
+
+```text
+curated-skills/
+├── custom-skills/              # Workspace for your personal custom skills
+│   ├── push/                   # Bundled utility: Autonomous conventional commit & push
+│   │   └── SKILL.md
+│   └── skill-manager/          # 🧠 CORE ENGINE: Universal autonomous skill manager agent
+│       └── SKILL.md
+├── .gitignore                  # Git ignore rules for logs, temp files & OS metadata
+├── LICENSE                     # MIT open-source license
+├── README.md                   # Documentation, setup guides, and skills catalog
+├── install.bat                 # ⚡ Double-click interactive launcher for Windows
+├── install.ps1                 # 🚀 Cross-platform installation & synchronization engine
+├── skills.json                 # 📋 Active manifest: Tracks curated & custom skills
+└── skills.template.json        # 🧼 Empty starter template for Clean Slate initialization
+```
+
+---
+
 ## 🤖 Using `skill-manager` with Your Agent
 
 Once installed, you don't need to manually edit config files. Simply speak to your AI agent:
