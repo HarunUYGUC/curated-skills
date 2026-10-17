@@ -46,7 +46,7 @@ When running the installer, choose between two modes:
 | Mode | What it Installs | Best For |
 | :--- | :--- | :--- |
 | **`[1] Full Curated Pack`** *(Recommended)* | Core `skill-manager` + 7 Curated External Skills + `push` | Getting a fully loaded, production-ready agent toolkit out of the box. |
-| **`[2] Clean Slate`** *(Empty Template)* | Core `skill-manager` engine **only** | Starting with a clean canvas to curate and build your own private skills catalog. |
+| **`[2] Clean Slate`** *(Empty Template)* | Core `skill-manager` engine **only** (initializes clean `skills.json` from `skills.template.json`) | Starting with a clean canvas to curate and build your own private skills catalog. |
 
 #### Method 1: Double-Click (Easiest - Windows)
 Double-click **`install.bat`**. You will be prompted to select **[1] Full Curated Pack** or **[2] Clean Slate**.
@@ -61,6 +61,9 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1
 # Mode 2: Clean Slate (Empty Template)
 powershell -ExecutionPolicy Bypass -File .\install.ps1 -CleanTemplate
 ```
+
+> **🛡️ Safety Confirmation Guard:**
+> Whenever **Clean Slate** is selected, the installer will always ask for explicit confirmation (`[y/N]`) before resetting `skills.json`. This ensures you never accidentally wipe out custom skills you have added over time. (To bypass the prompt in automated scripts, pass `-Force`).
 
 ---
 

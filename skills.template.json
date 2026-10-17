@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "description": "Personal Agent Skills Manifest - Managed by skill-manager",
+  "skills": {
+    "external": [],
+    "custom": [
+      {
+        "name": "skill-manager",
+        "author": "HarunUYGUC",
+        "path": "custom-skills/skill-manager",
+        "description": "Automates adding, removing, creating, and synchronizing skills across AI coding agents"
+      }
+    ]
+  }
+}

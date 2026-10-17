@@ -10,16 +10,24 @@ param (
     [string]$TargetDir = "$HOME\.gemini\config\skills",
 
     # Install ONLY the core skill-manager engine (Clean Slate / Empty Template)
-    [switch]$CleanTemplate = $false
+    [switch]$CleanTemplate = $false,
+
+    # Bypass confirmation prompt in Clean Slate mode (useful for automated scripts)
+    [switch]$Force = $false
 )
 
 $ErrorActionPreference = "Stop"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $ManifestFile = Join-Path $ScriptDir "skills.json"
+$TemplateFile = Join-Path $ScriptDir "skills.template.json"
 
 if (!(Test-Path $ManifestFile)) {
-    Write-Error "Manifest file not found: $ManifestFile"
-    exit 1
+    if (Test-Path $TemplateFile) {
+        Copy-Item -Path $TemplateFile -Destination $ManifestFile -Force
+    } else {
+        Write-Error "Manifest file not found: $ManifestFile"
+        exit 1
+    }
 }
 
 Write-Host "==========================================================" -ForegroundColor Cyan
@@ -36,9 +44,30 @@ if (!(Test-Path $TargetDir)) {
     New-Item -ItemType Directory -Force -Path $TargetDir | Out-Null
 }
 
-$manifest = Get-Content $ManifestFile -Raw -Encoding UTF8 | ConvertFrom-Json
-
 if ($CleanTemplate) {
+    # Safety confirmation prompt every time Clean Slate is requested
+    if (!$Force) {
+        Write-Host "`n==========================================================" -ForegroundColor Yellow
+        Write-Host "⚠️  CONFIRMATION REQUIRED: Clean Slate Mode" -ForegroundColor Yellow
+        Write-Host "==========================================================" -ForegroundColor Yellow
+        Write-Host "This will reset 'skills.json' to an empty template (only skill-manager)." -ForegroundColor White
+        Write-Host "Any external or custom skills in skills.json will be cleared." -ForegroundColor White
+        Write-Host "==========================================================" -ForegroundColor Yellow
+
+        $confirmation = Read-Host "`nAre you sure you want to reset skills.json? [y/N] (Default: N)"
+        if ($confirmation -notmatch "^[yY]$") {
+            Write-Host "`n[x] Clean Slate cancelled. Your 'skills.json' was NOT modified." -ForegroundColor Cyan
+            Write-Host "Exiting setup safely." -ForegroundColor Green
+            exit 0
+        }
+    }
+
+    # Activate clean template as skills.json
+    if (Test-Path $TemplateFile) {
+        Write-Host "`n  [i] Initializing clean manifest: skills.json" -ForegroundColor DarkGray
+        Copy-Item -Path $TemplateFile -Destination $ManifestFile -Force
+    }
+
     # 1. Clean Slate Mode: Install only the core skill-manager engine
     Write-Host "`n[1/1] Installing Core Engine (skill-manager)..." -ForegroundColor Green
     $skillManagerDir = Join-Path $ScriptDir "custom-skills\skill-manager"
@@ -51,10 +80,12 @@ if ($CleanTemplate) {
 
     Write-Host "`n==========================================================" -ForegroundColor Cyan
     Write-Host "Clean Slate Template Initialized Successfully!" -ForegroundColor Green
-    Write-Host "Core skill-manager installed. External curated skills skipped." -ForegroundColor Yellow
+    Write-Host "Core skill-manager installed and skills.json initialized with clean template." -ForegroundColor Yellow
     Write-Host "You can now use your AI agent to add or create custom skills." -ForegroundColor Cyan
     Write-Host "==========================================================" -ForegroundColor Cyan
 } else {
+    $manifest = Get-Content $ManifestFile -Raw -Encoding UTF8 | ConvertFrom-Json
+
     # 1. Full Mode: Install Custom Skills
     Write-Host "`n[1/2] Installing Custom Skills..." -ForegroundColor Green
     $customSkillsDir = Join-Path $ScriptDir "custom-skills"
