@@ -40,10 +40,10 @@ $resolvedTargets = [System.Collections.Generic.List[string]]::new()
 $targetDescriptions = [System.Collections.Generic.List[string]]::new()
 
 $knownHosts = @{
-    "gemini"   = @{ Name = "Google Antigravity"; Root = "$HOME\.gemini";   Path = "$HOME\.gemini\config\skills" }
-    "claude"   = @{ Name = "Claude Code";        Root = "$HOME\.claude";   Path = "$HOME\.claude\skills" }
-    "cursor"   = @{ Name = "Cursor";             Root = "$HOME\.cursor";   Path = "$HOME\.cursor\skills" }
-    "windsurf" = @{ Name = "Windsurf";           Root = "$HOME\.windsurf"; Path = "$HOME\.windsurf\skills" }
+    "gemini"   = @{ Name = "Google Antigravity"; Root = "$HOME/.gemini";   Path = "$HOME/.gemini/config/skills" }
+    "claude"   = @{ Name = "Claude Code";        Root = "$HOME/.claude";   Path = "$HOME/.claude/skills" }
+    "cursor"   = @{ Name = "Cursor";             Root = "$HOME/.cursor";   Path = "$HOME/.cursor/skills" }
+    "windsurf" = @{ Name = "Windsurf";           Root = "$HOME/.windsurf"; Path = "$HOME/.windsurf/skills" }
 }
 
 if ($TargetDir) {
@@ -207,7 +207,7 @@ if ($CleanTemplate) {
         }
     }
 
-    $skillManagerDir = Join-Path $ScriptDir "custom-skills\skill-manager"
+    $skillManagerDir = Join-Path (Join-Path $ScriptDir "custom-skills") "skill-manager"
     if (Test-Path $skillManagerDir) {
         Write-Host "  -> Installing: skill-manager (Universal Agent Manager)" -ForegroundColor Cyan
         Copy-Item -Path $skillManagerDir -Destination $primaryTarget -Recurse -Force
@@ -347,7 +347,7 @@ if ($resolvedTargets.Count -gt 1) {
             Copy-Item -Path (Join-Path $primaryTarget "skill-manager") -Destination $secondaryTarget -Recurse -Force
         } else {
             # Local fast copy
-            Copy-Item -Path "$primaryTarget\*" -Destination $secondaryTarget -Recurse -Force
+            Copy-Item -Path (Join-Path $primaryTarget "*") -Destination $secondaryTarget -Recurse -Force
         }
         Write-Host "    [OK] Synchronized in milliseconds!" -ForegroundColor Green
     }
