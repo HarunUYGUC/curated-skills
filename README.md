@@ -67,7 +67,7 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1 -CleanTemplate
 ```
 
 > **🛡️ Safety Confirmation Guard:**
-> Whenever **Clean Slate** is selected, the installer will always ask for explicit confirmation (`[y/N]`) before resetting `skills.json`. This ensures you never accidentally wipe out custom skills you have added over time. (To bypass the prompt in automated scripts, pass `-Force`).
+> Whenever **Clean Slate** is selected, the installer will always ask for explicit confirmation (`[y/N]`) before resetting `skills.json` and `README.md`, removing extra custom/local skills from the repository, and pruning installed skills from your AI hosts. This ensures you never accidentally wipe out files without a warning. (To bypass the prompt in automated scripts, pass `-Force`).
 
 ---
 

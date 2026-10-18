@@ -123,7 +123,8 @@ if ($CleanTemplate) {
         Write-Host "`n==========================================================" -ForegroundColor Yellow
         Write-Host "[!] CONFIRMATION REQUIRED: Clean Slate Mode" -ForegroundColor Yellow
         Write-Host "==========================================================" -ForegroundColor Yellow
-        Write-Host "This will reset 'skills.json' and 'README.md' to clean templates (only skill-manager)" -ForegroundColor White
+        Write-Host "This will reset 'skills.json' and 'README.md' to clean templates (only skill-manager)," -ForegroundColor White
+        Write-Host "prune 'custom-skills/' (except skill-manager) and 'local-skills/' (except .gitkeep) from this repo," -ForegroundColor White
         Write-Host "and prune installed skills from your AI hosts to leave only skill-manager." -ForegroundColor White
         Write-Host "==========================================================" -ForegroundColor Yellow
 
@@ -145,6 +146,24 @@ if ($CleanTemplate) {
     if (Test-Path $ReadmeTemplateFile) {
         Write-Host "  [i] Initializing clean documentation: README.md" -ForegroundColor DarkGray
         Copy-Item -Path $ReadmeTemplateFile -Destination $ReadmeFile -Force
+    }
+
+    # Prune repository custom-skills (keep only skill-manager)
+    $repoCustomSkillsDir = Join-Path $ScriptDir "custom-skills"
+    if (Test-Path $repoCustomSkillsDir) {
+        Get-ChildItem -Path $repoCustomSkillsDir -Directory | Where-Object { $_.Name -ne "skill-manager" } | ForEach-Object {
+            Write-Host "  [-] Pruning custom skill from repo: $($_.Name)" -ForegroundColor DarkGray
+            Remove-Item -Path $_.FullName -Recurse -Force
+        }
+    }
+
+    # Prune repository local-skills (keep only .gitkeep)
+    $repoLocalSkillsDir = Join-Path $ScriptDir "local-skills"
+    if (Test-Path $repoLocalSkillsDir) {
+        Get-ChildItem -Path $repoLocalSkillsDir | Where-Object { $_.Name -ne ".gitkeep" } | ForEach-Object {
+            Write-Host "  [-] Pruning local skill archive from repo: $($_.Name)" -ForegroundColor DarkGray
+            Remove-Item -Path $_.FullName -Recurse -Force
+        }
     }
 
     # 1. Clean Slate Mode: Prune existing non-core skills and install only skill-manager
