@@ -131,7 +131,64 @@ Trigger: User requests to remove or delete a skill.
 
 ---
 
-## 6. Switching Target Host Preference
+## 6. Cataloging & Archiving Local Skills to Central Repository
+
+Trigger: User in a workspace requests to catalog, register, or archive a local skill to the central repository (e.g., *"Save / bookmark this project's local skill to central repository"*, *"Archive this local skill to curated-skills"*).
+
+### Step 1: Locate Local Skill
+1. Identify the skill folder inside `<workspace>/.agents/skills/<skill-name>/` (or `<workspace>/.claude/skills/<skill-name>/`).
+2. Read `SKILL.md` to extract name, description, and origin.
+
+### Step 2: Register in Central Repository
+- **If External (originates from an upstream GitHub repository):**
+  1. Add an entry to `curated-skills/skills.json` under `skills.local.external`:
+     ```json
+     {
+       "name": "<name>",
+       "project": "<project-name-or-context>",
+       "author": "<author>",
+       "repo": "https://github.com/<owner>/<repo>",
+       "subpath": "<optional-subpath>",
+       "type": "git-clone" | "github-extract",
+       "references": ["<optional-reference-files>"],
+       "description": "<concise-summary>"
+     }
+     ```
+  2. Add a row to the **3. Cataloged Local Skills (Archive)** table in `curated-skills/README.md`.
+
+- **If Custom (project-specific bespoke workflow):**
+  1. Copy the skill directory from `<workspace>/.agents/skills/<skill-name>/` to `curated-skills/local-skills/<skill-name>/`.
+  2. Add an entry to `curated-skills/skills.json` under `skills.local.custom`:
+     ```json
+     {
+       "name": "<name>",
+       "project": "<project-name-or-context>",
+       "author": "<author>",
+       "path": "local-skills/<name>",
+       "description": "<concise-summary>"
+     }
+     ```
+  3. Add a row to the **3. Cataloged Local Skills (Archive)** table in `curated-skills/README.md`.
+
+*(Note: Cataloged local skills are NEVER installed during global `install.bat` / `install.ps1` runs. They remain safely archived for on-demand project use).*
+
+---
+
+## 7. Restoring / Installing a Cataloged Local Skill to Current Workspace
+
+Trigger: User in a project workspace requests to install a previously cataloged local skill (e.g., *"Install cataloged local skill '<name>' into this project"*, *"Restore local skill '<name>' from central repository"*).
+
+1. Search `curated-skills/skills.json` under `skills.local.external` and `skills.local.custom` for `<name>`.
+2. Target directory is `<workspace>/.agents/skills/<name>/` (or `<workspace>/.claude/skills/<name>/` for Claude Code).
+3. If found in `skills.local.external`:
+   - Download or clone directly into `<workspace>/.agents/skills/<name>/`.
+4. If found in `skills.local.custom`:
+   - Copy from `curated-skills/local-skills/<name>/` to `<workspace>/.agents/skills/<name>/`.
+5. Confirm to the user that the skill is now active locally in this workspace without modifying any global AI host directories.
+
+---
+
+## 8. Switching Target Host Preference
 
 Trigger: User requests to change their default target AI host (e.g., *"Switch sync mode to auto"*, *"Only sync to Antigravity from now on"*, *"Change skill manager target to Claude Code"*).
 
@@ -145,7 +202,7 @@ Trigger: User requests to change their default target AI host (e.g., *"Switch sy
 
 ---
 
-## 7. Git Hygiene for `curated-skills`
+## 9. Git Hygiene for `curated-skills`
 Whenever modifications are made to the central `curated-skills` repository (for global additions, removals, or custom skill authoring):
 - Run `git status` to check changes.
 - Suggest or commit with a conventional commit message (e.g., `feat(skills): add <skill-name>`, `feat(custom): add <skill-name>`, or `chore(skills): remove <skill-name>`).

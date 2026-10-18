@@ -93,6 +93,10 @@
         "path": "custom-skills/skill-manager",
         "description": "Automates adding, removing, creating, and synchronizing skills within the curated-skills repository"
       }
-    ]
+    ],
+    "local": {
+      "external": [],
+      "custom": []
+    }
   }
 }

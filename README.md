@@ -130,25 +130,34 @@ The [`custom-skills/`](./custom-skills/) directory is your personal workspace:
 * **`push`**: A bundled sample utility that inspects git changes, crafts conventional commit messages in English, and pushes to GitHub. (Keep it or replace it with your own workflows!).
 * **Your Own Skills**: Place any new custom skill directories inside `custom-skills/`. The installer will automatically discover and install them.
 
+### 4. Cataloged Local Skills (`skills.json -> local` & `local-skills/`)
+
+A personal registry and archive for project-specific skills that you do **not** want installed globally:
+* **Zero Global Bloat**: Local skills recorded in `skills.json` under `local` are **never** installed during global setup (`install.bat` / `install.ps1`).
+* **Archived Bespoke Skills (`local-skills/`)**: Custom workflows built for specific projects are safely archived in `local-skills/` so they are version-controlled and never lost.
+* **On-Demand Restore**: While working in any project, simply ask your agent to pull a cataloged local skill directly into `<workspace>/.agents/skills/`.
+
 ---
 
 ## 📂 Repository Structure
 
 ```text
 curated-skills/
-├── custom-skills/              # Workspace for your personal custom skills
+├── custom-skills/              # Workspace for your globally installed custom skills
 │   ├── git-summary/            # 📊 Standup summary & dev activity aggregator
 │   │   └── SKILL.md
 │   ├── push/                   # Bundled utility: Autonomous conventional commit & push
 │   │   └── SKILL.md
 │   └── skill-manager/          # 🧠 CORE ENGINE: Universal autonomous skill manager agent
 │       └── SKILL.md
+├── local-skills/               # 📦 Archive for project-specific local custom skills
+│   └── .gitkeep
 ├── .gitignore                  # Git ignore rules for logs, temp files & OS metadata
 ├── LICENSE                     # MIT open-source license
 ├── README.md                   # Documentation, setup guides, and skills catalog
 ├── install.bat                 # ⚡ Double-click interactive launcher for Windows
 ├── install.ps1                 # 🚀 Cross-platform installation & synchronization engine
-├── skills.json                 # 📋 Active manifest: Tracks curated & custom skills
+├── skills.json                 # 📋 Active manifest: Tracks curated, custom & local skills
 └── skills.template.json        # 🧼 Empty starter template for Clean Slate initialization
 ```
 
@@ -160,6 +169,8 @@ Once installed, you don't need to manually edit config files. Simply speak to yo
 
 * *"Add the GitHub skill from `https://github.com/user/my-skill`"*
 * *"Create a new skill for summarizing Kubernetes deployment logs"*
+* *"Save / bookmark this project's local skill to my central curated repository"*
+* *"Install the cataloged local skill 'stripe-flow' into this project"*
 * *"Remove the diagram-design skill"*
 
 The `skill-manager` will prompt you for the desired scope (**Global** for all projects or **Local** for the current workspace) and handle installation automatically.

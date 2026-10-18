@@ -11,6 +11,10 @@
         "path": "custom-skills/skill-manager",
         "description": "Automates adding, removing, creating, and synchronizing skills across AI coding agents"
       }
-    ]
+    ],
+    "local": {
+      "external": [],
+      "custom": []
+    }
   }
 }
