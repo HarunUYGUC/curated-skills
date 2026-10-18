@@ -118,6 +118,36 @@ if (!(Test-Path $primaryTarget)) {
 }
 
 if ($CleanTemplate) {
+    # Resolve all skills managed by curated-skills to ensure Targeted Pruning (preserves independent skills)
+    $managedSkillNames = @()
+    if (Test-Path $ManifestFile) {
+        try {
+            $existingManifest = Get-Content $ManifestFile -Raw -Encoding UTF8 | ConvertFrom-Json
+            if ($existingManifest.skills.external) { $managedSkillNames += $existingManifest.skills.external.name }
+            if ($existingManifest.skills.custom) { $managedSkillNames += $existingManifest.skills.custom }
+            if ($existingManifest.custom) { $managedSkillNames += $existingManifest.custom }
+            if ($existingManifest.local.external) { $managedSkillNames += $existingManifest.local.external.name }
+            if ($existingManifest.local.custom) { $managedSkillNames += $existingManifest.local.custom.name }
+        } catch {}
+    }
+    $repoCustomSkillsDir = Join-Path $ScriptDir "custom-skills"
+    if (Test-Path $repoCustomSkillsDir) {
+        $managedSkillNames += (Get-ChildItem -Path $repoCustomSkillsDir -Directory).Name
+    }
+    $repoLocalSkillsDir = Join-Path $ScriptDir "local-skills"
+    if (Test-Path $repoLocalSkillsDir) {
+        $managedSkillNames += (Get-ChildItem -Path $repoLocalSkillsDir -Directory).Name
+    }
+    # Default curated pack baseline fallback
+    $defaultCuratedBaseline = @(
+        "ui-ux-pro-max", "diagram-design", "shipping-and-launch",
+        "security-and-hardening", "performance-optimization",
+        "api-and-interface-design", "code-simplification",
+        "ci-cd-and-automation", "git-summary", "push"
+    )
+    $managedSkillNames += $defaultCuratedBaseline
+    $managedSkillNames = $managedSkillNames | Select-Object -Unique | Where-Object { $_ -and $_ -ne "skill-manager" }
+
     # Safety confirmation prompt every time Clean Slate is requested
     if (!$Force) {
         Write-Host "`n==========================================================" -ForegroundColor Yellow
@@ -125,7 +155,7 @@ if ($CleanTemplate) {
         Write-Host "==========================================================" -ForegroundColor Yellow
         Write-Host "This will reset 'skills.json' and 'README.md' to clean templates (only skill-manager)," -ForegroundColor White
         Write-Host "prune 'custom-skills/' (except skill-manager) and 'local-skills/' (except .gitkeep) from this repo," -ForegroundColor White
-        Write-Host "and prune installed skills from your AI hosts to leave only skill-manager." -ForegroundColor White
+        Write-Host "and remove curated skills from your AI hosts (preserving any independent skills)." -ForegroundColor White
         Write-Host "==========================================================" -ForegroundColor Yellow
 
         $confirmation = Read-Host "`nAre you sure you want to reset to Clean Slate? [y/N] (Default: N)"
@@ -149,7 +179,6 @@ if ($CleanTemplate) {
     }
 
     # Prune repository custom-skills (keep only skill-manager)
-    $repoCustomSkillsDir = Join-Path $ScriptDir "custom-skills"
     if (Test-Path $repoCustomSkillsDir) {
         Get-ChildItem -Path $repoCustomSkillsDir -Directory | Where-Object { $_.Name -ne "skill-manager" } | ForEach-Object {
             Write-Host "  [-] Pruning custom skill from repo: $($_.Name)" -ForegroundColor DarkGray
@@ -158,7 +187,6 @@ if ($CleanTemplate) {
     }
 
     # Prune repository local-skills (keep only .gitkeep)
-    $repoLocalSkillsDir = Join-Path $ScriptDir "local-skills"
     if (Test-Path $repoLocalSkillsDir) {
         Get-ChildItem -Path $repoLocalSkillsDir | Where-Object { $_.Name -ne ".gitkeep" } | ForEach-Object {
             Write-Host "  [-] Pruning local skill archive from repo: $($_.Name)" -ForegroundColor DarkGray
@@ -166,12 +194,16 @@ if ($CleanTemplate) {
         }
     }
 
-    # 1. Clean Slate Mode: Prune existing non-core skills and install only skill-manager
+    # 1. Clean Slate Mode: Prune ONLY managed skills from target environment (preserve independent skills)
     Write-Host "`n[1/1] Initializing Clean Slate in target environment..." -ForegroundColor Green
     if (Test-Path $primaryTarget) {
         Get-ChildItem -Path $primaryTarget -Directory | Where-Object { $_.Name -ne "skill-manager" } | ForEach-Object {
-            Write-Host "  [-] Pruning: $($_.Name)" -ForegroundColor DarkGray
-            Remove-Item -Path $_.FullName -Recurse -Force
+            if ($managedSkillNames -contains $_.Name) {
+                Write-Host "  [-] Pruning managed skill: $($_.Name)" -ForegroundColor DarkGray
+                Remove-Item -Path $_.FullName -Recurse -Force
+            } else {
+                Write-Host "  [i] Preserving independent skill: $($_.Name)" -ForegroundColor Cyan
+            }
         }
     }
 
@@ -301,15 +333,22 @@ if ($resolvedTargets.Count -gt 1) {
             New-Item -ItemType Directory -Force -Path $secondaryTarget | Out-Null
         }
 
-        # If Clean Slate mode, prune existing non-core skills from secondary targets
+        # If Clean Slate mode, prune ONLY managed skills from secondary targets
         if ($CleanTemplate) {
             Get-ChildItem -Path $secondaryTarget -Directory | Where-Object { $_.Name -ne "skill-manager" } | ForEach-Object {
-                Remove-Item -Path $_.FullName -Recurse -Force
+                if ($managedSkillNames -contains $_.Name) {
+                    Write-Host "    [-] Pruning managed skill: $($_.Name)" -ForegroundColor DarkGray
+                    Remove-Item -Path $_.FullName -Recurse -Force
+                } else {
+                    Write-Host "    [i] Preserving independent skill: $($_.Name)" -ForegroundColor Cyan
+                }
             }
+            # In Clean Slate, replicate only skill-manager to secondary targets
+            Copy-Item -Path (Join-Path $primaryTarget "skill-manager") -Destination $secondaryTarget -Recurse -Force
+        } else {
+            # Local fast copy
+            Copy-Item -Path "$primaryTarget\*" -Destination $secondaryTarget -Recurse -Force
         }
-
-        # Local fast copy
-        Copy-Item -Path "$primaryTarget\*" -Destination $secondaryTarget -Recurse -Force
         Write-Host "    [OK] Synchronized in milliseconds!" -ForegroundColor Green
     }
 }
