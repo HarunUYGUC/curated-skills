@@ -120,14 +120,24 @@ Trigger: User requests to build a new skill or custom workflow.
 
 Trigger: User requests to remove or delete a skill.
 
-1. Determine where the skill is located (Global in `curated-skills`, or Local in the workspace).
-2. If Global:
-   - Remove entry from `curated-skills/skills.json`.
+1. Determine where the skill is located:
+   - **Global Skill:** Registered in `curated-skills` (`skills.external` or `skills.custom`) and installed on global hosts.
+   - **Cataloged Local Skill:** Bookmarked in `curated-skills` (`skills.local.external` or `skills.local.custom`).
+   - **Workspace Local Skill:** Active inside `<workspace>/.agents/skills/<skill-name>/` (or `<workspace>/.claude/skills/`).
+
+2. **If Global:**
+   - Remove entry from `curated-skills/skills.json` under `skills.external` or `skills.custom`.
    - Remove row from `curated-skills/README.md`.
    - If custom, delete `curated-skills/custom-skills/<skill-name>/`.
    - Delete from all installed AI host directories (e.g., `~/.gemini/config/skills/<skill-name>/`, `~/.claude/skills/<skill-name>/`, `~/.cursor/skills/<skill-name>/`, `~/.windsurf/skills/<skill-name>/`).
-- **If Local:**
-  1. Delete `<workspace>\.agents\skills\<skill-name>/`.
+
+3. **If Cataloged Local Skill (Removing from Central Archive):**
+   - Remove entry from `curated-skills/skills.json` under `skills.local.external` or `skills.local.custom`.
+   - Remove row from `curated-skills/README.md` (if listed in cataloged table).
+   - If custom, delete `curated-skills/local-skills/<skill-name>/`.
+
+4. **If Workspace Local Skill:**
+   - Delete `<workspace>/.agents/skills/<skill-name>/` (or `<workspace>/.claude/skills/<skill-name>/`).
 
 ---
 

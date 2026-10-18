@@ -82,6 +82,7 @@ else {
 
     # If no AI agent directory was detected, default to Google Antigravity
     if ($resolvedTargets.Count -eq 0) {
+        $noHostDetected = $true
         $resolvedTargets.Add($knownHosts["gemini"].Path)
         $targetDescriptions.Add("$($knownHosts['gemini'].Name) (Default: $($knownHosts['gemini'].Path))")
     }
@@ -95,6 +96,11 @@ Write-Host "==========================================================" -Foregro
 Write-Host "Target Environment(s):" -ForegroundColor Yellow
 foreach ($desc in $targetDescriptions) {
     Write-Host "  -> $desc" -ForegroundColor Yellow
+}
+
+if ($noHostDetected) {
+    Write-Host "`n  [i] Note: No installed AI tool directories (.gemini, .claude, .cursor, .windsurf) were found." -ForegroundColor DarkGray
+    Write-Host "      Defaulting target environment to Google Antigravity ($($knownHosts['gemini'].Path))." -ForegroundColor DarkGray
 }
 
 if ($CleanTemplate) {
@@ -115,11 +121,11 @@ if ($CleanTemplate) {
         Write-Host "`n==========================================================" -ForegroundColor Yellow
         Write-Host "[!] CONFIRMATION REQUIRED: Clean Slate Mode" -ForegroundColor Yellow
         Write-Host "==========================================================" -ForegroundColor Yellow
-        Write-Host "This will reset 'skills.json' to an empty template (only skill-manager)." -ForegroundColor White
-        Write-Host "Any external or custom skills in skills.json will be cleared." -ForegroundColor White
+        Write-Host "This will reset 'skills.json' to an empty template (only skill-manager)" -ForegroundColor White
+        Write-Host "and prune installed skills from your AI hosts to leave only skill-manager." -ForegroundColor White
         Write-Host "==========================================================" -ForegroundColor Yellow
 
-        $confirmation = Read-Host "`nAre you sure you want to reset skills.json? [y/N] (Default: N)"
+        $confirmation = Read-Host "`nAre you sure you want to reset to Clean Slate? [y/N] (Default: N)"
         if ($confirmation -notmatch "^[yY]$") {
             Write-Host "`n[x] Clean Slate cancelled. Your 'skills.json' was NOT modified." -ForegroundColor Cyan
             Write-Host "Exiting setup safely." -ForegroundColor Green
@@ -133,8 +139,15 @@ if ($CleanTemplate) {
         Copy-Item -Path $TemplateFile -Destination $ManifestFile -Force
     }
 
-    # 1. Clean Slate Mode: Install only the core skill-manager engine
-    Write-Host "`n[1/1] Installing Core Engine (skill-manager)..." -ForegroundColor Green
+    # 1. Clean Slate Mode: Prune existing non-core skills and install only skill-manager
+    Write-Host "`n[1/1] Initializing Clean Slate in target environment..." -ForegroundColor Green
+    if (Test-Path $primaryTarget) {
+        Get-ChildItem -Path $primaryTarget -Directory | Where-Object { $_.Name -ne "skill-manager" } | ForEach-Object {
+            Write-Host "  [-] Pruning: $($_.Name)" -ForegroundColor DarkGray
+            Remove-Item -Path $_.FullName -Recurse -Force
+        }
+    }
+
     $skillManagerDir = Join-Path $ScriptDir "custom-skills\skill-manager"
     if (Test-Path $skillManagerDir) {
         Write-Host "  -> Installing: skill-manager (Universal Agent Manager)" -ForegroundColor Cyan
@@ -259,6 +272,13 @@ if ($resolvedTargets.Count -gt 1) {
 
         if (!(Test-Path $secondaryTarget)) {
             New-Item -ItemType Directory -Force -Path $secondaryTarget | Out-Null
+        }
+
+        # If Clean Slate mode, prune existing non-core skills from secondary targets
+        if ($CleanTemplate) {
+            Get-ChildItem -Path $secondaryTarget -Directory | Where-Object { $_.Name -ne "skill-manager" } | ForEach-Object {
+                Remove-Item -Path $_.FullName -Recurse -Force
+            }
         }
 
         # Local fast copy

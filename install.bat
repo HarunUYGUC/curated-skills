@@ -17,6 +17,7 @@ echo   [3] Claude Code only         (%USERPROFILE%\.claude\skills)
 echo   [4] Cursor / Codex only      (%USERPROFILE%\.cursor\skills)
 echo   [5] Windsurf only            (%USERPROFILE%\.windsurf\skills)
 echo.
+set "hostChoice="
 set /p hostChoice="Select target [1-5] (Default: 1 - Auto-Detect): "
 
 set "HOST_FLAG=-HostChoice auto"
@@ -36,6 +37,7 @@ echo   [2] Clean Slate (Empty Template)
 echo       Installs ONLY the core skill-manager engine.
 echo       Start with an empty catalog to build your own skills.
 echo.
+set "mode="
 set /p mode="Select mode [1 or 2] (Default: 1): "
 
 set "MODE_FLAG="
