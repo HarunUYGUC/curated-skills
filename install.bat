@@ -1,14 +1,14 @@
 @echo off
 chcp 65001 >nul
-title Curated Skills & Agent Manager Setup
+title Curated Skills and Agent Manager Setup
 
 echo ==========================================================
-echo   🚀 Curated Skills & Agent Manager Setup
+echo   Curated Skills and Agent Manager Setup
 echo ==========================================================
 echo.
 echo [Step 1/2] Select Target AI Environment:
 echo.
-echo   [1] Auto-Detect & Sync ALL (Recommended)
+echo   [1] Auto-Detect and Sync ALL (Recommended)
 echo       Automatically finds and installs to all installed AI tools:
 echo       Google Antigravity, Claude Code, Cursor, and Windsurf.
 echo.
