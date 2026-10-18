@@ -137,6 +137,10 @@ You are working on a proprietary client project (e.g., an e-commerce platform wi
      > *"Restore the cataloged local skill 'stripe-helper' into this workspace."*
    * The agent copies it straight into `<current-workspace>/.agents/skills/stripe-helper/`.
 
+> 🛡️ **The Two Guarantees for Local Skills:**
+> 1. **Opt-In Archiving Only:** A local skill in your project workspace is **NEVER** added to `skills.json` or `local-skills/` unless you explicitly say: *"Archive / bookmark this local skill"*. Your private project tools will never accidentally leak into your central dotfiles.
+> 2. **Zero Auto-Installation:** Even when cataloged in `skills.json`, local skills are **NEVER** installed globally or into new projects during `install.bat` / `install.ps1`. They are strictly on-demand—only installed when you explicitly say: *"Restore / install cataloged local skill <name> into this project"*.
+
 ---
 
 ## 🧼 Scenario 6: Clean Slate & Fresh Starts

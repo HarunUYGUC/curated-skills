@@ -137,7 +137,12 @@ Place your own reusable custom skills in [`custom-skills/`](./custom-skills/):
 ### 4. Cataloged Local Skills (`skills.json -> local` & `local-skills/`)
 
 A personal registry and archive for project-specific skills that you do **not** want installed globally:
-* **Zero Global Bloat**: Local skills recorded in `skills.json` under `local` are **never** installed during global setup (`install.bat` / `install.ps1`).
+
+> 🛡️ **The Two Guarantees for Local Skills:**
+> 1. **Opt-In Archiving Only:** A local skill in your project workspace is **NEVER** added to `skills.json` or `local-skills/` unless you explicitly tell your agent: *"Archive / bookmark this local skill"*. Your private project tools will never accidentally leak into your central dotfiles.
+> 2. **Zero Auto-Installation:** Even when cataloged in `skills.json`, local skills are **NEVER** installed globally or into new projects during `install.bat` / `install.ps1`. They are strictly on-demand—only installed when you explicitly say: *"Restore / install cataloged local skill <name> into this project"*.
+
+* **Zero Global Bloat**: Keeps your global AI context clean and focused only on universal workflows.
 * **Archived Bespoke Skills (`local-skills/`)**: Custom workflows built for specific projects are safely archived in `local-skills/` so they are version-controlled and never lost.
 * **On-Demand Restore**: While working in any project, simply ask your agent to pull a cataloged local skill directly into `<workspace>/.agents/skills/`.
 
