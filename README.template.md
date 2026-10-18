@@ -4,6 +4,8 @@
 
 A modular, lightweight, and cross-platform **Dotfiles & Management Framework** for AI coding agent skills ([Google Antigravity](https://antigravity.google), [Claude Code](https://claude.ai), [Cursor](https://cursor.com), [Windsurf](https://codeium.com/windsurf), Codex, etc.).
 
+> 💡 **New here?** Read [**Real-World Scenarios & Everyday Workflows (`SCENARIOS.md`)**](./SCENARIOS.md) to see how this system automates your AI agent skills across machines, projects, and coding assistants without manual configuration.
+
 ---
 
 ### 🎯 The Core Purpose
@@ -119,6 +121,7 @@ curated-skills/
 ├── LICENSE                     # MIT open-source license
 ├── README.md                   # Documentation, setup guides, and skills catalog
 ├── README.template.md          # 🧼 Clean starter documentation for Clean Slate mode
+├── SCENARIOS.md                # 💡 Real-world usage scenarios & everyday workflows
 ├── install.bat                 # ⚡ Double-click interactive launcher for Windows
 ├── install.ps1                 # 🚀 Cross-platform installation & synchronization engine
 ├── skills.json                 # 📋 Active manifest: Tracks curated, custom & local skills
