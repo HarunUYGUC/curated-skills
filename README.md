@@ -125,10 +125,12 @@ The installer saves your chosen host selection (`targetHost`) in `repo-config.js
 
 ### 3. Custom / Personal Skills (`custom-skills/`)
 
-The [`custom-skills/`](./custom-skills/) directory is your personal workspace:
-* **`git-summary`**: Transforms raw git commits and working tree status into a sleek, copy-paste ready daily standup summary.
-* **`push`**: A bundled sample utility that inspects git changes, crafts conventional commit messages in English, and pushes to GitHub. (Keep it or replace it with your own workflows!).
-* **Your Own Skills**: Place any new custom skill directories inside `custom-skills/`. The installer will automatically discover and install them.
+Place your own reusable custom skills in [`custom-skills/`](./custom-skills/):
+
+| Skill | Author | Description |
+| :--- | :--- | :--- |
+| **`git-summary`** | [HarunUYGUC](https://github.com/HarunUYGUC) | Transforms raw git commits and working tree status into a sleek, copy-paste ready daily standup summary. |
+| **`push`** | [HarunUYGUC](https://github.com/HarunUYGUC) | Bundled sample utility that inspects git changes, crafts conventional commit messages in English, and pushes to GitHub. |
 
 ### 4. Cataloged Local Skills (`skills.json -> local` & `local-skills/`)
 
@@ -136,6 +138,10 @@ A personal registry and archive for project-specific skills that you do **not** 
 * **Zero Global Bloat**: Local skills recorded in `skills.json` under `local` are **never** installed during global setup (`install.bat` / `install.ps1`).
 * **Archived Bespoke Skills (`local-skills/`)**: Custom workflows built for specific projects are safely archived in `local-skills/` so they are version-controlled and never lost.
 * **On-Demand Restore**: While working in any project, simply ask your agent to pull a cataloged local skill directly into `<workspace>/.agents/skills/`.
+
+| Skill | Project | Path / Source | Description |
+| :--- | :--- | :--- | :--- |
+| *None yet* | *Project Name* | *local-skills/<name> or https://github.com/...* | *Ask your agent to bookmark project-specific skills here.* |
 
 ---
 
@@ -155,6 +161,7 @@ curated-skills/
 ├── .gitignore                  # Git ignore rules for logs, temp files & OS metadata
 ├── LICENSE                     # MIT open-source license
 ├── README.md                   # Documentation, setup guides, and skills catalog
+├── README.template.md          # 🧼 Clean starter documentation for Clean Slate initialization
 ├── install.bat                 # ⚡ Double-click interactive launcher for Windows
 ├── install.ps1                 # 🚀 Cross-platform installation & synchronization engine
 ├── skills.json                 # 📋 Active manifest: Tracks curated, custom & local skills

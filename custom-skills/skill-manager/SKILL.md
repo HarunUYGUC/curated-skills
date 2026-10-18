@@ -164,7 +164,8 @@ Trigger: User in a workspace requests to catalog, register, or archive a local s
        "description": "<concise-summary>"
      }
      ```
-  2. Add a row to the **3. Cataloged Local Skills (Archive)** table in `curated-skills/README.md`.
+  2. Add a row to the **4. Cataloged Local Skills** table in `curated-skills/README.md`:
+     `| **<name>** | <project> | <repo-url> | <description> |`
 
 - **If Custom (project-specific bespoke workflow):**
   1. Copy the skill directory from `<workspace>/.agents/skills/<skill-name>/` to `curated-skills/local-skills/<skill-name>/`.
@@ -178,7 +179,8 @@ Trigger: User in a workspace requests to catalog, register, or archive a local s
        "description": "<concise-summary>"
      }
      ```
-  3. Add a row to the **3. Cataloged Local Skills (Archive)** table in `curated-skills/README.md`.
+  3. Add a row to the **4. Cataloged Local Skills** table in `curated-skills/README.md`:
+     `| **<name>** | <project> | local-skills/<name> | <description> |`
 
 *(Note: Cataloged local skills are NEVER installed during global `install.bat` / `install.ps1` runs. They remain safely archived for on-demand project use).*
 
@@ -212,7 +214,25 @@ Trigger: User requests to change their default target AI host (e.g., *"Switch sy
 
 ---
 
-## 9. Git Hygiene for `curated-skills`
-Whenever modifications are made to the central `curated-skills` repository (for global additions, removals, or custom skill authoring):
-- Run `git status` to check changes.
-- Suggest or commit with a conventional commit message (e.g., `feat(skills): add <skill-name>`, `feat(custom): add <skill-name>`, or `chore(skills): remove <skill-name>`).
+## 9. Git Hygiene & GitHub Sync Call-to-Action
+
+Whenever modifications are made to the central `curated-skills` repository (e.g., adding a global skill, creating a custom skill, cataloging a local skill, or removing a skill):
+
+1. **Inspect Git Changes:**
+   - Run `git status` inside the central curated repository to verify all staged and unstaged files.
+
+2. **Mandatory End-of-Response Confirmation Prompt:**
+   - Always append a polite, low-friction confirmation prompt at the very end of your final response:
+     > 💡 **GitHub Backup:** Would you like me to commit and push these central repository changes to GitHub? Just reply with **"Yes"**, **"Do it"**, or **"Push"**.
+     *(If communicating in Turkish: `💡 **GitHub Senkronizasyonu:** Bu değişiklikleri merkezi GitHub reponuza yedeklememi (commit & push) ister misiniz? Sadece **"Yap"**, **"Evet"** veya **"Push"** demeniz yeterlidir.`)*
+
+3. **Autonomous Execution Upon User Confirmation:**
+   - When the user replies with a confirmation (e.g., *"yes"*, *"do it"*, *"yap"*, *"push"*):
+     - Stage the files: `git add .`
+     - Commit with a clear conventional commit message in English:
+       - `feat(skills): add <skill-name>`
+       - `feat(custom): add <skill-name>`
+       - `feat(local): catalog <skill-name> from <project>`
+       - `chore(skills): remove <skill-name>`
+     - Push to remote: `git push origin main`
+     - Briefly report the commit hash and confirmation to the user.

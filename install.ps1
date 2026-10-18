@@ -21,6 +21,8 @@ $ErrorActionPreference = "Stop"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $ManifestFile = Join-Path $ScriptDir "skills.json"
 $TemplateFile = Join-Path $ScriptDir "skills.template.json"
+$ReadmeFile = Join-Path $ScriptDir "README.md"
+$ReadmeTemplateFile = Join-Path $ScriptDir "README.template.md"
 
 if (!(Test-Path $ManifestFile)) {
     if (Test-Path $TemplateFile) {
@@ -121,13 +123,13 @@ if ($CleanTemplate) {
         Write-Host "`n==========================================================" -ForegroundColor Yellow
         Write-Host "[!] CONFIRMATION REQUIRED: Clean Slate Mode" -ForegroundColor Yellow
         Write-Host "==========================================================" -ForegroundColor Yellow
-        Write-Host "This will reset 'skills.json' to an empty template (only skill-manager)" -ForegroundColor White
+        Write-Host "This will reset 'skills.json' and 'README.md' to clean templates (only skill-manager)" -ForegroundColor White
         Write-Host "and prune installed skills from your AI hosts to leave only skill-manager." -ForegroundColor White
         Write-Host "==========================================================" -ForegroundColor Yellow
 
         $confirmation = Read-Host "`nAre you sure you want to reset to Clean Slate? [y/N] (Default: N)"
         if ($confirmation -notmatch "^[yY]$") {
-            Write-Host "`n[x] Clean Slate cancelled. Your 'skills.json' was NOT modified." -ForegroundColor Cyan
+            Write-Host "`n[x] Clean Slate cancelled. Your configuration was NOT modified." -ForegroundColor Cyan
             Write-Host "Exiting setup safely." -ForegroundColor Green
             exit 0
         }
@@ -137,6 +139,12 @@ if ($CleanTemplate) {
     if (Test-Path $TemplateFile) {
         Write-Host "`n  [i] Initializing clean manifest: skills.json" -ForegroundColor DarkGray
         Copy-Item -Path $TemplateFile -Destination $ManifestFile -Force
+    }
+
+    # Activate clean template as README.md
+    if (Test-Path $ReadmeTemplateFile) {
+        Write-Host "  [i] Initializing clean documentation: README.md" -ForegroundColor DarkGray
+        Copy-Item -Path $ReadmeTemplateFile -Destination $ReadmeFile -Force
     }
 
     # 1. Clean Slate Mode: Prune existing non-core skills and install only skill-manager
